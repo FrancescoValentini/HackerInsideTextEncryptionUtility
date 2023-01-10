@@ -26,7 +26,7 @@ Il testo scritto sarà ora criptato, codificato e formattato sulla base delle op
 Per criptare un file procedere come segue:
 1) Avviare il programma e sbloccare il KeyStore utilizzando la propria password
 2) Selezionare dal menù a tendina la chiave che si desidera utilizzare
-3) Inserire il testo da criptato (o caricarlo da un file con l'apposita funzione nel menù contestuale)
+3) Inserire il testo criptato (o caricarlo da un file con l'apposita funzione nel menù contestuale)
 4) Premere il bottone DECRYPT
 
 # Impostazioni generali di formattazione del testo e di codifica
