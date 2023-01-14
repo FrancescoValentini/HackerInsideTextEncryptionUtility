@@ -37,6 +37,7 @@ Per criptare un file procedere come segue:
 
 - **SPACING:** Aggiunge uno spazio dopo "n" caratteri
 - **TextArea Wrapping:** Opzione di "a capo automatico" della textArea
+
 Queste informazioni vengono memorizzate attraverso le "Java Preferences API"
 
 # Zeroize
