@@ -88,7 +88,7 @@ public class TextEncryptionUtil_Main {
 	public TextEncryptionUtil_Main() {
 		initialize();
 		if(new File(keyStoreFile).exists()) { // OPEN KEYSTORE
-			String password = passwordInput("Inserisci la password");
+			String password = passwordInput("KeyStore Password");
 			keyStorePassword = password;
 			try {
 				ks = KeyStoreUtils.loadKeyStore(password,keyStoreFile);
