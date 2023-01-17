@@ -1,13 +1,8 @@
 package it.HackerInside.TextEncryptionUtility;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.NoSuchAlgorithmException;
@@ -26,8 +21,8 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import technology.zeroalpha.security.pgpwordlist.InvalidHexValueException;
+import technology.zeroalpha.security.pgpwordlist.PGPWordListConverter;
 
 public class AES256 {
 	public static void encrypt(InputStream in, OutputStream out, SecretKeySpec keySpec,byte[] iv) throws Exception{
@@ -149,9 +144,21 @@ public class AES256 {
 				return Base64.getEncoder().encodeToString(os.toByteArray());
 			}else if(encoding.equalsIgnoreCase("base58")) {// Base58 Encoding
 				return Base58.encode(os.toByteArray());
-			}else {
+			}else if(encoding.equalsIgnoreCase("pgpWordlist")) {// PGP Wordlist encoding
+				PGPWordListConverter pgpWordListConverter = new PGPWordListConverter();
+				try {
+					return pgpWordListConverter.hexToPGPWordlist(bytesToHex(os.toByteArray()));
+					//return t.hexToPGPWordlist(bytesToHex(os.toByteArray()));
+				} catch (InvalidHexValueException e1) {
+
+					e1.printStackTrace();
+				}
+			}
+			else {
 				return bytesToHex(os.toByteArray());
 			}
+			
+			return "";
 			
 		}
 		else if(mode==Cipher.DECRYPT_MODE){
@@ -162,7 +169,17 @@ public class AES256 {
 				decodedData = Base64.getDecoder().decode(input);
 			}else if(encoding.equalsIgnoreCase("base58")) {// Base58 Decoding
 				decodedData = Base58.decode(input);
+			}else if(encoding.equalsIgnoreCase("pgpWordlist")) {// PGP Wordlist decoding
+				PGPWordListConverter pgpWordListConverter = new PGPWordListConverter();
+				try {
+					decodedData = hexStringToByteArray(pgpWordListConverter.pgpWordlistToHex(input));
+				} catch (InvalidHexValueException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
+			
+
 			is = new BufferedInputStream(new ByteArrayInputStream(decodedData));
 			byte[] iv = new byte[16];
 			is.read(iv);
@@ -208,6 +225,4 @@ public class AES256 {
 	    }
 	    return data;
 	}
-
-
 }

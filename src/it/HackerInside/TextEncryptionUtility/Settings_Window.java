@@ -138,7 +138,7 @@ public class Settings_Window {
 		cmbEncoding.setBounds(93, 11, 200, 36);
 		panel.add(cmbEncoding);
 
-		cmbEncoding.setModel(new DefaultComboBoxModel(new String[] {"Base64", "Base58", "Hex"}));
+		cmbEncoding.setModel(new DefaultComboBoxModel(new String[] {"Base64", "Base58", "Hex", "PGP Wordlist"}));
 		
 		JButton btnSaveSettings = new JButton("SAVE");
 		btnSaveSettings.setBackground(Color.WHITE);
@@ -282,7 +282,13 @@ public class Settings_Window {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						JOptionPane.showMessageDialog(null, "Chiave aggiunta!");
+						JOptionPane.showMessageDialog(null, "Key Added!");
+						try {
+							TextEncryptionUtil_Main.ks = KeyStoreUtils.loadKeyStore(walletpwd,TextEncryptionUtil_Main.keyStoreFile); // Reload Keystore
+						} catch (NoSuchAlgorithmException | CertificateException | KeyStoreException | IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}else {
 						JOptionPane.showMessageDialog(null, "Empty key alias!");
 					}
@@ -375,7 +381,7 @@ public class Settings_Window {
 						try {
 							KeyStoreUtils.deleteSecretKey(TextEncryptionUtil_Main.ks,new String(txtbKeyStoreKey.getPassword()),alias);
 							KeyStoreUtils.saveKeyStore(TextEncryptionUtil_Main.ks,new String(txtbKeyStoreKey.getPassword()),TextEncryptionUtil_Main.keyStoreFile);
-							JOptionPane.showMessageDialog(null, "Chiave: " + alias +" Eliminata!");
+							JOptionPane.showMessageDialog(null, "Key: " + alias +" Deleted!");
 						} catch (KeyStoreException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();

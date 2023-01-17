@@ -45,6 +45,7 @@ import java.util.prefs.Preferences;
 import java.awt.event.MouseWheelEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import javax.swing.event.PopupMenuEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -198,7 +199,8 @@ public class TextEncryptionUtil_Main {
 					// Check spacing
 					
 					int spacing = prefs.getInt("spacing", 0); // Spazio
-					if(spacing>0)
+					int encoding = prefs.getInt("encoding", 0); //Encoding
+					if(spacing>0 && encoding !=3) // Spaziatura non disponibile per codifica PGP Wordlist
 						txtbData.setText(addSpaces(encrypted,spacing));
 					else
 						txtbData.setText(encrypted);
@@ -217,8 +219,15 @@ public class TextEncryptionUtil_Main {
 		btnDecrypt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String kid = cmbKID.getSelectedItem().toString();
+				String encryptedData = "";
+				int encoding = prefs.getInt("encoding", 0);
+				encryptedData = txtbData.getText().toString();
+				
+				if(encoding !=3) // Rimuove gli spazi se e solo se l'opzione di codifica non è PGP Wordlist
+					encryptedData = encryptedData.replace(" ", "");
+				
 				try {
-					txtbData.setText(decrypt(txtbData.getText().toString().replace(" ", ""),kid)); // Decripta (e rimuove gli spazi dal testo codificato)
+					txtbData.setText(decrypt(encryptedData,kid)); // Decripta (e rimuove gli spazi dal testo codificato)
 				} catch(Exception e1) {
 					e1.printStackTrace();
 					JOptionPane.showMessageDialog(null,e1.getMessage());
@@ -327,6 +336,8 @@ public class TextEncryptionUtil_Main {
 			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"base58");
 		else if(encoding == 2)
 			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"hex");
+		else if(encoding == 3)
+			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"pgpWordlist");
 		return encrypted;
 	}
 	
@@ -341,7 +352,8 @@ public class TextEncryptionUtil_Main {
 		else if(encoding == 2)
 			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"hex");
 		
-		
+		else if(encoding == 3)
+			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"pgpWordlist");
 		return decrypted;
 	}
 	
