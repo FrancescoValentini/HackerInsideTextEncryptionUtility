@@ -34,8 +34,9 @@ Per criptare un file procedere come segue:
   - Base64
   - Base58
   - Esadecimale (Hex)
-
-- **SPACING:** Aggiunge uno spazio dopo "n" caratteri
+  - PGP Word list
+  
+- **SPACING:** Aggiunge uno spazio dopo "n" caratteri (Disabilitato con codifica PGP Word list)
 - **TextArea Wrapping:** Opzione di "a capo automatico" della textArea
 
 Queste informazioni vengono memorizzate attraverso le "Java Preferences API"
@@ -68,6 +69,7 @@ Non mi assumo nessuna responsabilità di eventuali danni provocati da questo cod
 
 # Credits
 <a href="https://www.flaticon.com/free-icons/data-encryption" title="data encryption icons">Data encryption icons created by kerismaker - Flaticon</a>
+<a href="https://github.com/ZeroAlphaTech/j-pgp-wordlist" title="PGP Word list encoding library">Libreria utilizzata per la codifica PGP Word List</a>
 
 # Sitografia
 - https://it.wikipedia.org/wiki/Advanced_Encryption_Standard

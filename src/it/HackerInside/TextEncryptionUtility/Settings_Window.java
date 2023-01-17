@@ -138,7 +138,7 @@ public class Settings_Window {
 		cmbEncoding.setBounds(93, 11, 200, 36);
 		panel.add(cmbEncoding);
 
-		cmbEncoding.setModel(new DefaultComboBoxModel(new String[] {"Base64", "Base58", "Hex", "PGP Wordlist"}));
+		cmbEncoding.setModel(new DefaultComboBoxModel(new String[] {"Base64", "Base58", "Hex", "PGP Word list"}));
 		
 		JButton btnSaveSettings = new JButton("SAVE");
 		btnSaveSettings.setBackground(Color.WHITE);
