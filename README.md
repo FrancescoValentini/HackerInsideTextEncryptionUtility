@@ -69,6 +69,7 @@ Non mi assumo nessuna responsabilità di eventuali danni provocati da questo cod
 
 # Credits
 <a href="https://www.flaticon.com/free-icons/data-encryption" title="data encryption icons">Data encryption icons created by kerismaker - Flaticon</a>
+
 <a href="https://github.com/ZeroAlphaTech/j-pgp-wordlist" title="PGP Word list encoding library">Libreria utilizzata per la codifica PGP Word List</a>
 
 # Sitografia
