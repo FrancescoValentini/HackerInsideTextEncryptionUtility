@@ -125,12 +125,18 @@ public class AES256 {
 		
 	}
 	
-	public static String encryptDecryptString(int mode, String input, SecretKey key,String encoding) throws Exception {
+	public static String encryptDecryptString(int mode, String input, SecretKey key,String encoding,boolean compression) throws Exception {
 
 		BufferedInputStream is; 
 		ByteArrayOutputStream  os = new ByteArrayOutputStream();
 		if(mode==Cipher.ENCRYPT_MODE){
-			is = new BufferedInputStream(new ByteArrayInputStream(input.getBytes()));
+			byte[] ptData;
+			if(compression) { // Compressione
+				ptData = GZIPCompression.compress(input);
+			}else {
+				ptData = input.getBytes();
+			}
+			is = new BufferedInputStream(new ByteArrayInputStream(ptData));
 			SecureRandom r = new SecureRandom();
 			byte[] iv = new byte[16];
 			r.nextBytes(iv);
@@ -185,7 +191,13 @@ public class AES256 {
 			is.read(iv);
 			decrypt(is, os,key,iv);
 			System.out.println("Decoded IV: " + bytesToHex(iv));
-			return new String(os.toByteArray());
+			
+			if(compression) { // Compressione
+				return GZIPCompression.decompress(os.toByteArray());
+			}else {
+				return new String(os.toByteArray());
+			}
+			
 		}
 		else throw new Exception("unknown mode");
 		

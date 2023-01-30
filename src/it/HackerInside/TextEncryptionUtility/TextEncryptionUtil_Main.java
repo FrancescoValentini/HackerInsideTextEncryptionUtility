@@ -329,31 +329,35 @@ public class TextEncryptionUtil_Main {
 	public static String encrypt(String text, String KID) throws Exception { // Encrypt text
 		SecretKey key = KeyStoreUtils.getSecretKey(ks, keyStorePassword, KID);
 		int encoding = prefs.getInt("encoding", 0);
+		boolean compression = prefs.getBoolean("compression", false);
 		String encrypted = "";
 		if(encoding == 0)
-			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"base64");
+			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"base64",compression);
 		else if(encoding == 1)
-			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"base58");
+			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"base58",compression);
 		else if(encoding == 2)
-			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"hex");
+			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"hex",compression);
 		else if(encoding == 3)
-			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"pgpWordlist");
+			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"pgpWordlist",compression);
+		
+		
 		return encrypted;
 	}
 	
 	public static String decrypt(String text, String KID) throws Exception { // Decrypt Text
 		SecretKey key = KeyStoreUtils.getSecretKey(ks, keyStorePassword, KID);
 		int encoding = prefs.getInt("encoding", 0);
+		boolean compression = prefs.getBoolean("compression", false);
 		String decrypted = "";
 		if(encoding == 0)
-			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"base64");
+			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"base64",compression);
 		else if(encoding == 1)
-			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"base58");
+			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"base58",compression);
 		else if(encoding == 2)
-			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"hex");
+			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"hex",compression);
 		
 		else if(encoding == 3)
-			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"pgpWordlist");
+			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"pgpWordlist",compression);
 		return decrypted;
 	}
 	
