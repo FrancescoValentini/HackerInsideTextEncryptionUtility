@@ -29,10 +29,10 @@ import java.awt.event.ActionListener;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyStoreException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.prefs.Preferences;
@@ -40,7 +40,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.border.TitledBorder;
 
 
-import javax.swing.UIManager;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import java.awt.event.KeyAdapter;
@@ -61,6 +60,7 @@ public class Settings_Window {
 	private JTextField txtbAliasChiave;
 	private JTextField txtbKCV;
 	private SecretKey sk;
+	private Ecdh ec;
 	/**
 	 * Launch the application.
 	 */
@@ -473,6 +473,118 @@ public class Settings_Window {
 			lblKcv_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			lblKcv_1.setBounds(22, 128, 78, 23);
 			panel3432.add(lblKcv_1);
+			
+			JPanel panel_4 = new JPanel();
+			panel_4.setBackground(Color.DARK_GRAY);
+			tabbedPane.addTab("ECDH", null, panel_4, null);
+			panel_4.setLayout(null);
+			
+			JPanel panel_5 = new JPanel();
+			panel_5.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "MY PUBLIC KEY", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
+			panel_5.setBackground(Color.DARK_GRAY);
+			panel_5.setBounds(10, 5, 432, 83);
+			panel_4.add(panel_5);
+			panel_5.setLayout(new BorderLayout(0, 0));
+			
+			JTextArea txtbMyPublicKey = new JTextArea();
+			txtbMyPublicKey.setLineWrap(true);
+			panel_5.add(txtbMyPublicKey, BorderLayout.CENTER);
+			
+			JPanel panel_5_1 = new JPanel();
+			panel_5_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "OTHER PUBLIC KEY", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(255, 255, 255)));
+			panel_5_1.setBackground(Color.DARK_GRAY);
+			panel_5_1.setBounds(10, 89, 432, 94);
+			panel_4.add(panel_5_1);
+			panel_5_1.setLayout(new BorderLayout(0, 0));
+			
+			JTextArea txtbOtherPublicKey = new JTextArea();
+			txtbOtherPublicKey.setWrapStyleWord(true);
+			txtbOtherPublicKey.setLineWrap(true);
+			panel_5_1.add(txtbOtherPublicKey, BorderLayout.CENTER);
+			
+			JPanel panel_5_1_1 = new JPanel();
+			panel_5_1_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "KEY", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(255, 255, 255)));
+			panel_5_1_1.setBackground(Color.DARK_GRAY);
+			panel_5_1_1.setBounds(10, 183, 432, 62);
+			panel_4.add(panel_5_1_1);
+			panel_5_1_1.setLayout(new BorderLayout(0, 0));
+			
+			JTextArea txtbGeneratedECKey = new JTextArea();
+			txtbGeneratedECKey.setWrapStyleWord(true);
+			txtbGeneratedECKey.setLineWrap(true);
+			txtbGeneratedECKey.setForeground(Color.RED);
+			panel_5_1_1.add(txtbGeneratedECKey, BorderLayout.CENTER);
+			JLabel lblNewLabel = new JLabel("KCV:");
+			lblNewLabel.setForeground(Color.WHITE);
+			lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblNewLabel.setBounds(10, 256, 46, 14);
+			panel_4.add(lblNewLabel);
+			
+			JLabel txtbKCVEC = new JLabel("---");
+			txtbKCVEC.setForeground(Color.WHITE);
+			txtbKCVEC.setFont(new Font("Tahoma", Font.BOLD, 14));
+			txtbKCVEC.setBounds(49, 256, 74, 14);
+			panel_4.add(txtbKCVEC);
+			
+			JButton btnCalculateECDH = new JButton("CALC");
+			btnCalculateECDH.setBackground(Color.WHITE);
+			btnCalculateECDH.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					// calcola il segreto condiviso (ECDH)
+					try {
+						byte[] derivedKey = ec.generateSharedSecret(txtbOtherPublicKey.getText());
+						txtbGeneratedECKey.setText(bytesToHex(derivedKey));
+						txtbKCVEC.setText(bytesToHex(ec.kcvAES(derivedKey)).substring(0, 6));
+					} catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				}
+			});
+			btnCalculateECDH.setBounds(175, 290, 89, 52);
+			panel_4.add(btnCalculateECDH);
+			
+			btnInitECDH = new JButton("INIT");
+			btnInitECDH.setBackground(Color.WHITE);
+			btnInitECDH.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					// Inizializza ecdh
+					try {
+						ec = new Ecdh(384);
+						txtbMyPublicKey.setText(ec.getPublicKey());
+						
+					} catch (NoSuchAlgorithmException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+			btnInitECDH.setBounds(76, 290, 89, 52);
+			panel_4.add(btnInitECDH);
+			
+
+			
+			JButton btnKeystoreAdd = new JButton("ADD");
+			btnKeystoreAdd.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String walletpwd = passwordInput("Keystore Password");
+					String keyAlias = textInput("Key Alias");
+					SecretKey originalKey = new SecretKeySpec(hexStringToByteArray(txtbGeneratedECKey.getText().toString()), 0,hexStringToByteArray(txtbGeneratedECKey.getText().toString()).length , "AES");
+					try {
+						KeyStoreUtils.addSecretKey(TextEncryptionUtil_Main.ks, walletpwd, keyAlias.toString(), originalKey);
+					} catch (KeyStoreException e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, e1.toString());
+						e1.printStackTrace();
+					}
+					JOptionPane.showMessageDialog(null, "Key Added!");
+				}
+			});
+			btnKeystoreAdd.setBackground(Color.WHITE);
+			btnKeystoreAdd.setBounds(274, 290, 89, 52);
+			panel_4.add(btnKeystoreAdd);
 			if(prefs.getBoolean("lineWrap", false)) {
 				chckbLineWrapping.setSelected(true);
 			}else {
@@ -508,6 +620,7 @@ public class Settings_Window {
 	private JPasswordField txtbKeyStoreKey;
 	private JTextField txtbAesKey;
 	private JTextField txtbKCV_1;
+	private JButton btnInitECDH;
 	public static String bytesToHex(byte[] bytes) {
 	    char[] hexChars = new char[bytes.length * 2];
 	    for (int j = 0; j < bytes.length; j++) {
@@ -533,6 +646,13 @@ public class Settings_Window {
 		int action = JOptionPane.showConfirmDialog(null, pwd,title,JOptionPane.OK_CANCEL_OPTION);
 		if(action < 0)JOptionPane.showMessageDialog(null,"Cancel, X or escape key selected");
 		return new String(pwd.getPassword());
+	}
+	
+	public static String textInput(String title) {
+		JTextField text = new JTextField();
+		int action = JOptionPane.showConfirmDialog(null, text,title,JOptionPane.OK_CANCEL_OPTION);
+		if(action < 0)JOptionPane.showMessageDialog(null,"Cancel, X or escape key selected");
+		return new String(text.getText().toString());
 	}
 	public static void updateKeysList(JComboBox<String> jcombo) throws Exception { // Aggiorna la lista delle chiavi
 		jcombo.removeAllItems();
