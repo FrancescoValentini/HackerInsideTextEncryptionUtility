@@ -72,6 +72,12 @@ public class TextEncryptionUtil_Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					if(args.length == 1) { // Consente di specificare un keystore diverso da quello di default
+						System.out.println("Using Keystore: " + args[0]);
+						keyStoreFile = args[0];
+					}else {
+						System.out.println("Using default keystore: " + keyStoreFile); // Se non viene specificato niente utilizza il keystore di default
+					}
 					TextEncryptionUtil_Main window = new TextEncryptionUtil_Main();
 					window.frmHackerinsideTextEncryption.setVisible(true);
 				} catch (Exception e) {
@@ -94,7 +100,6 @@ public class TextEncryptionUtil_Main {
 				ks = KeyStoreUtils.loadKeyStore(password,keyStoreFile);
 				keystoreExist = true;
 			} catch (NoSuchAlgorithmException | CertificateException | KeyStoreException | IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(null, e.toString());
 				System.exit(-1);;
