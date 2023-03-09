@@ -15,8 +15,9 @@ Applicativo che consente di criptare e decriptare testi utilizzando l'algoritmo 
 ## Gestione delle chiavi e KeyStore
 Il software per poter criptare e/o decriptare ha bisogno di accedere ad un KeyStore (JCEKS) da cui preleva la chiave scelta.
 - Appena avviato il software verifica la presenza di un KeyStore con nome "KeyStore.jks", se non trovato provvede a crearne uno chiedendo una password (password generale del KeyStore)
+	- è possibile specificare un keystore diverso da "KeyStore.jks" avviando il programma nel modo seguente: ```java -jar HackerInsideTextEncryptionUtility.jar <keystore>```
 - Per poter aggiungere una chiave ad un KeyStore è possibile utilizzare l'apposita scheda nelle impostazioni (FILL) oppure utilizzare uno dei tanti KeyStore explorer disponibili (consigliato https://keystore-explorer.org/)
-- Il file "KeyStore.jks" deve rimanere dentro la stessa cartella dove risiede l'eseguibile
+- Se non viene specificato un keystore differente il file "KeyStore.jks" deve rimanere dentro la stessa cartella dove risiede l'eseguibile
 
 ## ENCRYPT
 Per criptare un file procedere come segue:
