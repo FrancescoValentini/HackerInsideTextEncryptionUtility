@@ -27,11 +27,9 @@ import javax.swing.JScrollPane;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.RandomAccessFile;
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -67,7 +65,7 @@ public class TextEncryptionUtil_Main {
 
 	/**
 	 * Launch the application.
-	*/
+	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -83,7 +81,7 @@ public class TextEncryptionUtil_Main {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+
 			}
 		});
 	}
@@ -131,7 +129,7 @@ public class TextEncryptionUtil_Main {
 		frmHackerinsideTextEncryption.setResizable(false);
 		frmHackerinsideTextEncryption.setBounds(100, 100, 1048, 737);
 		frmHackerinsideTextEncryption.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 
 		JPanel panel = new JPanel();
 		panel.setForeground(Color.WHITE);
@@ -172,7 +170,7 @@ public class TextEncryptionUtil_Main {
 		});
 		scrollPane.setBounds(10, 87, 1012, 600);
 		panel.add(scrollPane);
-		
+
 		JComboBox cmbKID = new JComboBox();
 		cmbKID.setBackground(Color.WHITE);
 		cmbKID.addPopupMenuListener(new PopupMenuListener() {
@@ -202,7 +200,7 @@ public class TextEncryptionUtil_Main {
 				try {
 					String encrypted = encrypt(txtbData.getText().toString(),kid);
 					// Check spacing
-					
+
 					int spacing = prefs.getInt("spacing", 0); // Spazio
 					int encoding = prefs.getInt("encoding", 0); //Encoding
 					if(spacing>0 && encoding !=3) // Spaziatura non disponibile per codifica PGP Wordlist
@@ -227,10 +225,10 @@ public class TextEncryptionUtil_Main {
 				String encryptedData = "";
 				int encoding = prefs.getInt("encoding", 0);
 				encryptedData = txtbData.getText().toString();
-				
+
 				if(encoding !=3) // Rimuove gli spazi se e solo se l'opzione di codifica non è PGP Wordlist
 					encryptedData = encryptedData.replace(" ", "");
-				
+
 				try {
 					txtbData.setText(decrypt(encryptedData,kid)); // Decripta (e rimuove gli spazi dal testo codificato)
 				} catch(Exception e1) {
@@ -274,47 +272,47 @@ public class TextEncryptionUtil_Main {
 		btnSettings.setBounds(850, 17, 40, 36);
 		panel_1.add(btnSettings);
 		btnSettings.setIcon(new ImageIcon(TextEncryptionUtil_Main.class.getResource("/it/HackerInside/TextEncryptionUtility/res/icons8-support-30.png")));
-		
+
 		JLabel lblFrancescoValentini = new JLabel("Francesco Valentini - 2023");
 		lblFrancescoValentini.setForeground(Color.WHITE);
 		lblFrancescoValentini.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblFrancescoValentini.setBounds(613, 28, 173, 14);
 		panel_1.add(lblFrancescoValentini);
 
-		
+
 		// TextArea prefs
 		txtbData.setWrapStyleWord(prefs.getBoolean("lineWrap", false));
 		txtbData.setLineWrap(prefs.getBoolean("lineWrap", false));
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		addPopup(txtbData, popupMenu);
-		
+
 		JButton btnOpenFile = new JButton("Open File"); // Bottone del menù contestuale per aprire un file.
 		btnOpenFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-		        JFileChooser chooser = new JFileChooser();
-		        int returnVal = chooser.showOpenDialog(null);
-		        if(returnVal == JFileChooser.APPROVE_OPTION) {
-		        	txtbData.setText(readTextFile(chooser.getSelectedFile()));
-		        }
-				
+				JFileChooser chooser = new JFileChooser();
+				int returnVal = chooser.showOpenDialog(null);
+				if(returnVal == JFileChooser.APPROVE_OPTION) {
+					txtbData.setText(readTextFile(chooser.getSelectedFile()));
+				}
+
 			}
 		});
 		popupMenu.add(btnOpenFile);
-		
+
 		JButton btnSaveFile = new JButton("Save File");
 		btnSaveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame parentFrame = new JFrame();
 				JFileChooser fileChooser = new JFileChooser();
-		        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text File", "TXT");
-		        fileChooser.setFileFilter(filter);
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Text File", "TXT");
+				fileChooser.setFileFilter(filter);
 				int userSelection = fileChooser.showSaveDialog(parentFrame);
-				
+
 				if (userSelection == JFileChooser.APPROVE_OPTION) {
 					writeTextToFile(fileChooser.getSelectedFile(),txtbData.getText().toString());
 				}
-				
+
 			}
 		});
 		popupMenu.add(btnSaveFile);
@@ -344,11 +342,11 @@ public class TextEncryptionUtil_Main {
 			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"hex",compression);
 		else if(encoding == 3)
 			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"pgpWordlist",compression);
-		
-		
+
+
 		return encrypted;
 	}
-	
+
 	public static String decrypt(String text, String KID) throws Exception { // Decrypt Text
 		SecretKey key = KeyStoreUtils.getSecretKey(ks, keyStorePassword, KID);
 		int encoding = prefs.getInt("encoding", 0);
@@ -360,82 +358,93 @@ public class TextEncryptionUtil_Main {
 			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"base58",compression);
 		else if(encoding == 2)
 			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"hex",compression);
-		
+
 		else if(encoding == 3)
 			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"pgpWordlist",compression);
 		return decrypted;
 	}
-	
+
 	public static String addSpaces(String s, int n) {
-	    StringBuilder sb = new StringBuilder();
-	    int pos = 0;
-	    for (char c : s.toCharArray()) {
-	        if (pos > 0 && pos % n == 0) {
-	            sb.append(" ");
-	        }
-	        sb.append(c);
-	        pos++;
-	    }
-	    return sb.toString();
+		StringBuilder sb = new StringBuilder();
+		int pos = 0;
+		for (char c : s.toCharArray()) {
+			if (pos > 0 && pos % n == 0) {
+				sb.append(" ");
+			}
+			sb.append(c);
+			pos++;
+		}
+		return sb.toString();
 	}
-	
+
 	public static void zeroize() throws IOException { // Emergency Zeroize
 		if(twoFactor()) {
 			try {
 				Enumeration<String> aliases = ks.aliases();
 				while (aliases.hasMoreElements()) {
-				    String alias = aliases.nextElement();
-				    ks.deleteEntry(alias);
-				    
+					String alias = aliases.nextElement();
+					ks.deleteEntry(alias);
+
 				}
 				KeyStoreUtils.saveKeyStore(ks,"0000",keyStoreFile);
-				overwriteFileWithRandom(keyStoreFile,Files.size( Paths.get(keyStoreFile)));
-				
-				
+				zeroize(keyStoreFile);
+
+
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			JOptionPane.showMessageDialog(null, "ZEROIZED!");
+
 		}else {
 			JOptionPane.showMessageDialog(null, "Wrong OTP");
 		}
-		
-	}
-	
-	   public static boolean twoFactor() { // Codice One Time
-		    char[] chars = "ABCDEFGHJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
-		    Random rnd = new Random();
-		    StringBuilder sb = new StringBuilder();
-		    for (int i = 0; i < 5; i++)
-		        sb.append(chars[rnd.nextInt(chars.length)]);
 
-		    String generated = sb.toString();
-		    JTextField pwd = new JTextField(10);
-		    JOptionPane.showMessageDialog(null,"OTP: " + generated);
-		    int action = JOptionPane.showConfirmDialog(null, pwd,"OTP",JOptionPane.OK_CANCEL_OPTION);
-		    if(action < 0)JOptionPane.showMessageDialog(null,"Cancel, X or escape key selected");
-
-		    String otp = new String(pwd.getText().toUpperCase());
-		    if(generated.equals(otp))
-		    	return true;
-		    else
-		    	return false;
-	  }
-	   
-	public static void overwriteFileWithRandom(String fileName, long size) throws IOException { // Sovrascrive un file con caratteri random 
-	    SecureRandom random = new SecureRandom();
-	    FileOutputStream fos = new FileOutputStream(fileName);
-	    byte[] buffer = new byte[1024];
-	    while (size > 0) {
-	        random.nextBytes(buffer);
-	        int bytesToWrite = (int) Math.min(buffer.length, size);
-	        fos.write(buffer, 0, bytesToWrite);
-	        size -= bytesToWrite;
-	    }
-	    fos.close();
 	}
-	
+
+	public static boolean twoFactor() { // Codice One Time
+		char[] chars = "ABCDEFGHJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+		Random rnd = new Random();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < 5; i++)
+			sb.append(chars[rnd.nextInt(chars.length)]);
+
+		String generated = sb.toString();
+		JTextField pwd = new JTextField(10);
+		JOptionPane.showMessageDialog(null,"OTP: " + generated);
+		int action = JOptionPane.showConfirmDialog(null, pwd,"OTP",JOptionPane.OK_CANCEL_OPTION);
+		if(action < 0)JOptionPane.showMessageDialog(null,"Cancel, X or escape key selected");
+
+		String otp = new String(pwd.getText().toUpperCase());
+		if(generated.equals(otp))
+			return true;
+		else
+			return false;
+	}
+
+	public static void zeroize(String fileName) throws IOException { // sovrascrive il file più volte con pattern diversi
+		File file = new File(fileName);
+		RandomAccessFile raf = new RandomAccessFile(file, "rws");
+		long length = raf.length();
+		raf.seek(0);
+		SecureRandom random = new SecureRandom();
+		byte[] data = new byte[1024];
+		for (int j = 0; j < 3; j++) {
+			for (long i = 0; i < length; i += 1024) {
+				if (j % 2 == 0) {
+					raf.writeByte(0);
+				} else {
+					random.nextBytes(data);
+					raf.write(data);
+				}
+			}
+			raf.seek(0);
+		}
+		raf.close();
+		file.delete();
+	}
+
+
 	public static void keyStoreWizard() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException { // Configurazione iniziale di un nuovo keystore
 		String pwd = passwordInput("New KeyStore password");
 		ks  = KeyStore.getInstance("JCEKS");
@@ -443,7 +452,7 @@ public class TextEncryptionUtil_Main {
 		KeyStoreUtils.saveKeyStore(ks,pwd,keyStoreFile);
 		JOptionPane.showMessageDialog(null,"KeyStore initialized successfully.");
 	}
-	
+
 	private static void addPopup(Component component, final JPopupMenu popup) { // Menù contestuale textArea principale
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -461,7 +470,7 @@ public class TextEncryptionUtil_Main {
 			}
 		});
 	}
-	
+
 	private static String readTextFile(File f) {
 		String data = "";
 		try {
@@ -475,17 +484,17 @@ public class TextEncryptionUtil_Main {
 		}
 		return data;
 	}
-	
-	private static void writeTextToFile(File f,String data) {
-	    try {
-	        FileWriter myWriter = new FileWriter(f);
-	        myWriter.write(data);
-	        myWriter.close();
 
-	      } catch (IOException e) {
-	    	  JOptionPane.showMessageDialog(null,e.getMessage());
-	        e.printStackTrace();
-	      }
-        return;
+	private static void writeTextToFile(File f,String data) {
+		try {
+			FileWriter myWriter = new FileWriter(f);
+			myWriter.write(data);
+			myWriter.close();
+
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null,e.getMessage());
+			e.printStackTrace();
+		}
+		return;
 	}
 }
