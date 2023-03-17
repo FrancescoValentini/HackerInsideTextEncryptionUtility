@@ -159,6 +159,9 @@ public class AES256 {
 
 					e1.printStackTrace();
 				}
+			}else if(encoding.equalsIgnoreCase("base36")) {// Base36 Encoding
+				return Base36.encode(os.toByteArray());
+			
 			}
 			else {
 				return bytesToHex(os.toByteArray());
@@ -183,8 +186,9 @@ public class AES256 {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+			}else if(encoding.equalsIgnoreCase("base36")) {// Base36 Decoding
+				decodedData = Base36.decode(input);
 			}
-			
 
 			is = new BufferedInputStream(new ByteArrayInputStream(decodedData));
 			byte[] iv = new byte[16];

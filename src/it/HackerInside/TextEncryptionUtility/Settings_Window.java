@@ -130,7 +130,7 @@ public class Settings_Window {
 		cmbEncoding.setBounds(93, 11, 200, 36);
 		panel.add(cmbEncoding);
 
-		cmbEncoding.setModel(new DefaultComboBoxModel(new String[] {"Base64", "Base58", "Hex", "PGP Word list"}));
+		cmbEncoding.setModel(new DefaultComboBoxModel(new String[] {"Base64", "Base58", "Hex", "PGP Word list", "Base36"}));
 
 		JCheckBox chckbCompression = new JCheckBox("GZIP Compression");
 		chckbCompression.setBackground(Color.WHITE);
@@ -259,7 +259,7 @@ public class Settings_Window {
 				public void actionPerformed(ActionEvent e) {
 					if(!txtbAliasChiave.getText().toString().isEmpty()) {
 						String walletpwd = passwordInput("Keystore Password");
-						if(chckbxChiaveEsterna.isSelected()) {
+						if(chckbxChiaveEsterna.isSelected() && !walletpwd.equalsIgnoreCase("")) {
 							SecretKey originalKey = new SecretKeySpec(hexStringToByteArray(txtbSecretKey.getText().toString()), 0,hexStringToByteArray(txtbSecretKey.getText().toString()).length , "AES");
 							try {
 								KeyStoreUtils.addSecretKey(TextEncryptionUtil_Main.ks, walletpwd, txtbAliasChiave.getText().toString(), originalKey);
@@ -282,12 +282,20 @@ public class Settings_Window {
 							e1.printStackTrace();
 						}
 						JOptionPane.showMessageDialog(null, "Key Added!");
-						try {
-							TextEncryptionUtil_Main.ks = KeyStoreUtils.loadKeyStore(walletpwd,TextEncryptionUtil_Main.keyStoreFile); // Reload Keystore
-						} catch (NoSuchAlgorithmException | CertificateException | KeyStoreException | IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+						
+						if(!walletpwd.equalsIgnoreCase("")) {
+							try {
+								TextEncryptionUtil_Main.ks = KeyStoreUtils.loadKeyStore(walletpwd,TextEncryptionUtil_Main.keyStoreFile); // Reload Keystore
+								TextEncryptionUtil_Main.keyStorePassword = walletpwd;
+							} catch (NoSuchAlgorithmException | CertificateException | KeyStoreException | IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+						}else {
+							JOptionPane.showMessageDialog(null, "Empty keystore password!");
 						}
+
 					}else {
 						JOptionPane.showMessageDialog(null, "Empty key alias!");
 					}

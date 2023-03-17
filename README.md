@@ -40,6 +40,7 @@ Per criptare un file procedere come segue:
   - Base58
   - Esadecimale (Hex)
   - PGP Word list
+  - Base36
   
 - **SPACING:** Aggiunge uno spazio dopo "n" caratteri (Disabilitato con codifica PGP Word list)
 - **TextArea Wrapping:** Opzione di "a capo automatico" della textArea
@@ -102,3 +103,4 @@ Non mi assumo nessuna responsabilità di eventuali danni provocati da questo cod
 - https://en.wikipedia.org/wiki/Galois/Counter_Mode
 - https://github.com/multiformats/java-multibase/blob/master/src/main/java/io/ipfs/multibase/Base58.java
 - https://neilmadden.blog/2016/05/20/ephemeral-elliptic-curve-diffie-hellman-key-agreement-in-java/
+- https://en.wikipedia.org/wiki/Base36

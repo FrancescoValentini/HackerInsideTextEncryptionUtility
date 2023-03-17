@@ -342,6 +342,8 @@ public class TextEncryptionUtil_Main {
 			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"hex",compression);
 		else if(encoding == 3)
 			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"pgpWordlist",compression);
+		else if(encoding == 4)
+			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"base36",compression);
 
 
 		return encrypted;
@@ -361,6 +363,8 @@ public class TextEncryptionUtil_Main {
 
 		else if(encoding == 3)
 			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"pgpWordlist",compression);
+		else if(encoding == 4)
+			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"base36",compression);
 		return decrypted;
 	}
 
