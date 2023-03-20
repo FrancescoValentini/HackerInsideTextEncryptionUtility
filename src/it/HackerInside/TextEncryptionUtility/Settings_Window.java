@@ -583,7 +583,8 @@ public class Settings_Window {
 					SecretKey originalKey = new SecretKeySpec(hexStringToByteArray(txtbGeneratedECKey.getText().toString()), 0,hexStringToByteArray(txtbGeneratedECKey.getText().toString()).length , "AES");
 					try {
 						KeyStoreUtils.addSecretKey(TextEncryptionUtil_Main.ks, walletpwd, keyAlias.toString(), originalKey);
-					} catch (KeyStoreException e1) {
+						KeyStoreUtils.saveKeyStore(TextEncryptionUtil_Main.ks, walletpwd, TextEncryptionUtil_Main.keyStoreFile);
+					} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e1) {
 						// TODO Auto-generated catch block
 						JOptionPane.showMessageDialog(null, e1.toString());
 						e1.printStackTrace();
