@@ -34,7 +34,9 @@ import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.cert.CertificateException;
 import java.util.Enumeration;
 import java.util.Random;
@@ -43,6 +45,8 @@ import java.util.prefs.Preferences;
 import java.awt.event.MouseWheelEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.swing.event.PopupMenuEvent;
 import java.awt.event.ActionListener;
@@ -57,7 +61,7 @@ public class TextEncryptionUtil_Main {
 
 	private JFrame frmHackerinsideTextEncryption;
 	// Impostazioni KeyStore
-	public static String keyStoreFile = "KeyStore.jks";
+	public static String keyStoreFile = "KeyStore.bcfks";
 	public static KeyStore ks;
 	public static boolean keystoreExist = false;
 	static String keyStorePassword = "";
@@ -67,6 +71,7 @@ public class TextEncryptionUtil_Main {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		Security.addProvider(new BouncyCastleProvider());
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -97,7 +102,7 @@ public class TextEncryptionUtil_Main {
 			try {
 				ks = KeyStoreUtils.loadKeyStore(password,keyStoreFile);
 				keystoreExist = true;
-			} catch (NoSuchAlgorithmException | CertificateException | KeyStoreException | IOException e) {
+			} catch (NoSuchAlgorithmException | CertificateException | KeyStoreException | IOException | NoSuchProviderException e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(null, e.toString());
 				System.exit(-1);;
@@ -106,7 +111,7 @@ public class TextEncryptionUtil_Main {
 			JOptionPane.showMessageDialog(null, "KeyStore not found, a new one will be created.");
 			try {
 				keyStoreWizard();
-			} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
+			} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException | NoSuchProviderException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -390,9 +395,9 @@ public class TextEncryptionUtil_Main {
 					ks.deleteEntry(alias);
 
 				}
-				KeyStoreUtils.saveKeyStore(ks,"0000",keyStoreFile);
+				KeyStoreUtils.saveKeyStore(ks,randomString(128),keyStoreFile);
 				zeroize(keyStoreFile);
-
+				ks = null;
 
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
@@ -405,15 +410,19 @@ public class TextEncryptionUtil_Main {
 		}
 
 	}
+	
+	public static String randomString(int len) { // Genera stringhe casuali
+		char[] chars = "ABCDEFGHJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+		SecureRandom rnd = new SecureRandom();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < len; i++)
+			sb.append(chars[rnd.nextInt(chars.length)]);
+		
+		return sb.toString();
+	}
 
 	public static boolean twoFactor() { // Codice One Time
-		char[] chars = "ABCDEFGHJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
-		Random rnd = new Random();
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < 5; i++)
-			sb.append(chars[rnd.nextInt(chars.length)]);
-
-		String generated = sb.toString();
+		String generated = randomString(5);
 		JTextField pwd = new JTextField(10);
 		JOptionPane.showMessageDialog(null,"OTP: " + generated);
 		int action = JOptionPane.showConfirmDialog(null, pwd,"OTP",JOptionPane.OK_CANCEL_OPTION);
@@ -449,11 +458,11 @@ public class TextEncryptionUtil_Main {
 	}
 
 
-	public static void keyStoreWizard() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException { // Configurazione iniziale di un nuovo keystore
+	public static void keyStoreWizard() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, NoSuchProviderException { // Configurazione iniziale di un nuovo keystore
 		String pwd = passwordInput("New KeyStore password");
-		ks  = KeyStore.getInstance("JCEKS");
-		ks.load(null, pwd.toCharArray());
-		KeyStoreUtils.saveKeyStore(ks,pwd,keyStoreFile);
+		
+		ks = KeyStoreUtils.newKeystore(pwd, keyStoreFile);
+		
 		JOptionPane.showMessageDialog(null,"KeyStore initialized successfully.");
 	}
 

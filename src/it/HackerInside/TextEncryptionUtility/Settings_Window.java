@@ -27,6 +27,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
@@ -287,7 +288,7 @@ public class Settings_Window {
 							try {
 								TextEncryptionUtil_Main.ks = KeyStoreUtils.loadKeyStore(walletpwd,TextEncryptionUtil_Main.keyStoreFile); // Reload Keystore
 								TextEncryptionUtil_Main.keyStorePassword = walletpwd;
-							} catch (NoSuchAlgorithmException | CertificateException | KeyStoreException | IOException e1) {
+							} catch (NoSuchAlgorithmException | CertificateException | KeyStoreException | IOException | NoSuchProviderException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}

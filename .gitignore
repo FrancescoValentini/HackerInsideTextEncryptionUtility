@@ -72,3 +72,4 @@ local.properties
 
 # Keystore
 .jks
+.bcfks
