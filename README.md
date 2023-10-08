@@ -41,6 +41,8 @@ Per criptare un file procedere come segue:
   - Esadecimale (Hex)
   - PGP Word list
   - Base36
+  - Base32
+  - Base32-C (Versione modificata di Base32 che utilizza il carattere '9' per il padding)
   
 - **SPACING:** Aggiunge uno spazio dopo "n" caratteri (Disabilitato con codifica PGP Word list)
 - **TextArea Wrapping:** Opzione di "a capo automatico" della textArea
