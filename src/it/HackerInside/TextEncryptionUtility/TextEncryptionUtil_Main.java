@@ -39,7 +39,6 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.security.cert.CertificateException;
 import java.util.Enumeration;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.prefs.Preferences;
 import java.awt.event.MouseWheelEvent;
@@ -230,8 +229,11 @@ public class TextEncryptionUtil_Main {
 				String encryptedData = "";
 				int encoding = prefs.getInt("encoding", 0);
 				encryptedData = txtbData.getText().toString();
+				
+				encryptedData = encryptedData.replace("\n", ""); 
+				encryptedData = encryptedData.replace("\r", "");
 
-				if(encoding !=3) // Rimuove gli spazi se e solo se l'opzione di codifica non è PGP Wordlist
+				if(encoding !=3)  // Rimuove gli spazi se e solo se l'opzione di codifica non è PGP Wordlist
 					encryptedData = encryptedData.replace(" ", "");
 
 				try {
@@ -349,6 +351,10 @@ public class TextEncryptionUtil_Main {
 			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"pgpWordlist",compression);
 		else if(encoding == 4)
 			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"base36",compression);
+		else if(encoding == 5)
+			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"base32",compression);
+		else if(encoding == 6)
+			encrypted = AES256.encryptDecryptString(Cipher.ENCRYPT_MODE, text, key,"base32-c",compression);
 
 
 		return encrypted;
@@ -365,11 +371,14 @@ public class TextEncryptionUtil_Main {
 			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"base58",compression);
 		else if(encoding == 2)
 			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"hex",compression);
-
 		else if(encoding == 3)
 			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"pgpWordlist",compression);
 		else if(encoding == 4)
 			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"base36",compression);
+		else if(encoding == 5)
+			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"base32",compression);
+		else if(encoding == 6)
+			decrypted = AES256.encryptDecryptString(Cipher.DECRYPT_MODE, text, key,"base32-c",compression);
 		return decrypted;
 	}
 

@@ -21,6 +21,9 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Base32;
+
 import technology.zeroalpha.security.pgpwordlist.InvalidHexValueException;
 import technology.zeroalpha.security.pgpwordlist.PGPWordListConverter;
 
@@ -162,6 +165,12 @@ public class AES256 {
 			}else if(encoding.equalsIgnoreCase("base36")) {// Base36 Encoding
 				return Base36.encode(os.toByteArray());
 			
+			}else if(encoding.equalsIgnoreCase("base32")) {// Base32 Encoding
+				Base32 base32 = new Base32();
+				return base32.encodeAsString(os.toByteArray());
+			}else if(encoding.equalsIgnoreCase("base32-c")) {// Base32-C Encoding
+				Base32 base32 = new Base32();
+				return base32.encodeAsString(os.toByteArray()).replace('=', '9');
 			}
 			else {
 				return bytesToHex(os.toByteArray());
@@ -188,6 +197,13 @@ public class AES256 {
 				}
 			}else if(encoding.equalsIgnoreCase("base36")) {// Base36 Decoding
 				decodedData = Base36.decode(input);
+			}else if(encoding.equalsIgnoreCase("base32")) {// Base32 Encoding
+				Base32 base32 = new Base32();
+				decodedData = base32.decode(input);
+			}else if(encoding.equalsIgnoreCase("base32-c")) { // Base32-C
+				Base32 base32 = new Base32();
+				input = input.replace('9', '=');
+				decodedData = base32.decode(input);
 			}
 
 			is = new BufferedInputStream(new ByteArrayInputStream(decodedData));

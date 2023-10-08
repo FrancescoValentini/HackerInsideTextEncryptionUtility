@@ -131,7 +131,7 @@ public class Settings_Window {
 		cmbEncoding.setBounds(93, 11, 200, 36);
 		panel.add(cmbEncoding);
 
-		cmbEncoding.setModel(new DefaultComboBoxModel(new String[] {"Base64", "Base58", "Hex", "PGP Word list", "Base36"}));
+		cmbEncoding.setModel(new DefaultComboBoxModel(new String[] {"Base64", "Base58", "Hex", "PGP Word list", "Base36", "Base32", "Base32-C"}));
 
 		JCheckBox chckbCompression = new JCheckBox("GZIP Compression");
 		chckbCompression.setBackground(Color.WHITE);
