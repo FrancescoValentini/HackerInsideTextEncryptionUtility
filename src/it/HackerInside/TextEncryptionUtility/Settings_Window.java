@@ -46,6 +46,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.event.PopupMenuEvent;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class Settings_Window {
 
@@ -96,47 +99,34 @@ public class Settings_Window {
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.DARK_GRAY);
 		tabbedPane.addTab("General", null, panel, null);
-		panel.setLayout(null);
 
 
 
 		JCheckBox chckbLineWrapping = new JCheckBox("TextArea Wrapping");
 		chckbLineWrapping.setBackground(Color.WHITE);
-		chckbLineWrapping.setBounds(10, 124, 153, 23);
-		panel.add(chckbLineWrapping);
 
 		JSpinner spinnerSpacing = new JSpinner();
 		spinnerSpacing.setBackground(Color.WHITE);
 		spinnerSpacing.setModel(new SpinnerNumberModel(0, 0, 10, 1));
 		spinnerSpacing.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		spinnerSpacing.setBounds(93, 67, 51, 20);
-		panel.add(spinnerSpacing);
 
 		JLabel lblSpacing = new JLabel("SPACING:");
 		lblSpacing.setForeground(Color.WHITE);
 		lblSpacing.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblSpacing.setBounds(10, 70, 87, 14);
-		panel.add(lblSpacing);
 
 		JLabel lblEncoding = new JLabel("ENCODING:");
 		lblEncoding.setForeground(Color.WHITE);
 		lblEncoding.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblEncoding.setBounds(10, 22, 87, 14);
-		panel.add(lblEncoding);
 
 		JComboBox cmbEncoding = new JComboBox();
 		cmbEncoding.setBackground(Color.WHITE);
 		cmbEncoding.setToolTipText("");
 		cmbEncoding.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		cmbEncoding.setBounds(93, 11, 200, 36);
-		panel.add(cmbEncoding);
 
 		cmbEncoding.setModel(new DefaultComboBoxModel(new String[] {"Base64", "Base58", "Hex", "PGP Word list", "Base36", "Base32", "Base32-C"}));
 
 		JCheckBox chckbCompression = new JCheckBox("GZIP Compression");
 		chckbCompression.setBackground(Color.WHITE);
-		chckbCompression.setBounds(10, 94, 153, 23);
-		panel.add(chckbCompression);
 		
 		JButton btnSaveSettings = new JButton("SAVE");
 		btnSaveSettings.setBackground(Color.WHITE);
@@ -146,8 +136,6 @@ public class Settings_Window {
 			}
 		});
 		btnSaveSettings.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnSaveSettings.setBounds(181, 158, 89, 36);
-		panel.add(btnSaveSettings);
 
 		// Load prefs
 		try {
@@ -155,21 +143,70 @@ public class Settings_Window {
 
 			cmbEncoding.setSelectedIndex(prefs.getInt("encoding", 0));
 			spinnerSpacing.setValue(prefs.getInt("spacing", 0));
+			GroupLayout gl_panel = new GroupLayout(panel);
+			gl_panel.setHorizontalGroup(
+				gl_panel.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel.createSequentialGroup()
+						.addGap(10)
+						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+							.addComponent(lblEncoding, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+							.addGroup(gl_panel.createSequentialGroup()
+								.addGap(83)
+								.addComponent(cmbEncoding, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))))
+					.addGroup(gl_panel.createSequentialGroup()
+						.addGap(10)
+						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+							.addComponent(lblSpacing, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+							.addGroup(gl_panel.createSequentialGroup()
+								.addGap(83)
+								.addComponent(spinnerSpacing, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))))
+					.addGroup(gl_panel.createSequentialGroup()
+						.addGap(10)
+						.addComponent(chckbCompression, GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+						.addGap(289))
+					.addGroup(gl_panel.createSequentialGroup()
+						.addGap(10)
+						.addComponent(chckbLineWrapping, GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+						.addGap(289))
+					.addGroup(gl_panel.createSequentialGroup()
+						.addGap(181)
+						.addComponent(btnSaveSettings, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE))
+			);
+			gl_panel.setVerticalGroup(
+				gl_panel.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel.createSequentialGroup()
+						.addGap(11)
+						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel.createSequentialGroup()
+								.addGap(11)
+								.addComponent(lblEncoding, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
+							.addComponent(cmbEncoding, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+						.addGap(20)
+						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel.createSequentialGroup()
+								.addGap(3)
+								.addComponent(lblSpacing, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
+							.addComponent(spinnerSpacing, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+						.addGap(7)
+						.addComponent(chckbCompression)
+						.addGap(7)
+						.addComponent(chckbLineWrapping)
+						.addGap(11)
+						.addComponent(btnSaveSettings, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+			);
+			panel.setLayout(gl_panel);
 			
 
 
 			JPanel panel_1 = new JPanel();
 			panel_1.setBackground(Color.DARK_GRAY);
 			tabbedPane.addTab("FILL", null, panel_1, null);
-			panel_1.setLayout(null);
 
 			JPanel panel_2 = new JPanel();
 			panel_2.setLayout(null);
 			panel_2.setForeground(Color.WHITE);
 			panel_2.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "KEY", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(255, 255, 255)));
 			panel_2.setBackground(Color.DARK_GRAY);
-			panel_2.setBounds(10, 11, 432, 116);
-			panel_1.add(panel_2);
 
 			JTextArea txtbSecretKey = new JTextArea();
 			txtbSecretKey.setForeground(Color.WHITE);
@@ -208,8 +245,6 @@ public class Settings_Window {
 					}
 				}
 			});
-			chckbxChiaveEsterna.setBounds(183, 218, 154, 23);
-			panel_1.add(chckbxChiaveEsterna);
 
 			JButton btnGeneraChiave = new JButton("RANDOM KEY");
 			btnGeneraChiave.setBackground(Color.WHITE);
@@ -237,21 +272,15 @@ public class Settings_Window {
 					}
 				}
 			});
-			btnGeneraChiave.setBounds(22, 218, 148, 35);
-			panel_1.add(btnGeneraChiave);
 
 			JLabel lblAliasChiave = new JLabel("ALIAS:");
 			lblAliasChiave.setForeground(Color.WHITE);
 			lblAliasChiave.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			lblAliasChiave.setBounds(10, 138, 102, 23);
-			panel_1.add(lblAliasChiave);
 
 			txtbAliasChiave = new JTextField();
 			txtbAliasChiave.setBackground(Color.WHITE);
 			txtbAliasChiave.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			txtbAliasChiave.setColumns(10);
-			txtbAliasChiave.setBounds(112, 138, 330, 23);
-			panel_1.add(txtbAliasChiave);
 
 			JButton btnImportaChiave = new JButton("FILL");
 			btnImportaChiave.setBackground(Color.WHITE);
@@ -303,22 +332,16 @@ public class Settings_Window {
 
 				}
 			});
-			btnImportaChiave.setBounds(22, 264, 148, 35);
-			panel_1.add(btnImportaChiave);
 
 			JLabel lblKcv = new JLabel("KCV:");
 			lblKcv.setForeground(Color.WHITE);
 			lblKcv.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			lblKcv.setBounds(10, 172, 102, 23);
-			panel_1.add(lblKcv);
 
 			txtbKCV = new JTextField();
 			txtbKCV.setBackground(Color.WHITE);
 			txtbKCV.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			txtbKCV.setEditable(false);
 			txtbKCV.setColumns(10);
-			txtbKCV.setBounds(112, 172, 225, 23);
-			panel_1.add(txtbKCV);
 
 			JButton btnCalcKCV = new JButton("CALC");
 			btnCalcKCV.setBackground(Color.WHITE);
@@ -338,21 +361,63 @@ public class Settings_Window {
 					}
 				}
 			});
-			btnCalcKCV.setBounds(347, 172, 95, 23);
-			panel_1.add(btnCalcKCV);
+			GroupLayout gl_panel_1 = new GroupLayout(panel_1);
+			gl_panel_1.setHorizontalGroup(
+				gl_panel_1.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_1.createSequentialGroup()
+						.addGap(10)
+						.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 432, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_panel_1.createSequentialGroup()
+						.addGap(10)
+						.addComponent(lblAliasChiave, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtbAliasChiave, GroupLayout.PREFERRED_SIZE, 330, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_panel_1.createSequentialGroup()
+						.addGap(10)
+						.addComponent(lblKcv, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtbKCV, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
+						.addGap(10)
+						.addComponent(btnCalcKCV, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_panel_1.createSequentialGroup()
+						.addGap(22)
+						.addComponent(btnGeneraChiave, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
+						.addGap(13)
+						.addComponent(chckbxChiaveEsterna, GroupLayout.PREFERRED_SIZE, 154, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_panel_1.createSequentialGroup()
+						.addGap(22)
+						.addComponent(btnImportaChiave, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE))
+			);
+			gl_panel_1.setVerticalGroup(
+				gl_panel_1.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_1.createSequentialGroup()
+						.addGap(11)
+						.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+						.addGap(11)
+						.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+							.addComponent(lblAliasChiave, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+							.addComponent(txtbAliasChiave, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(11)
+						.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+							.addComponent(lblKcv, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+							.addComponent(txtbKCV, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnCalcKCV))
+						.addGap(23)
+						.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+							.addComponent(btnGeneraChiave, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+							.addComponent(chckbxChiaveEsterna))
+						.addGap(11)
+						.addComponent(btnImportaChiave, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+			);
+			panel_1.setLayout(gl_panel_1);
 
 			JPanel panel_3 = new JPanel();
 			panel_3.setBackground(Color.DARK_GRAY);
 			tabbedPane.addTab("KEYS", null, panel_3, null);
-			panel_3.setLayout(null);
 
 			JPanel panel3432 = new JPanel();
 			panel3432.setLayout(null);
 			panel3432.setForeground(Color.WHITE);
 			panel3432.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "KEYS", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(255, 255, 255)));
 			panel3432.setBackground(Color.DARK_GRAY);
-			panel3432.setBounds(22, 11, 407, 220);
-			panel_3.add(panel3432);
 
 			JComboBox cmbBoxKeyWallet_1_1 = new JComboBox();
 			cmbBoxKeyWallet_1_1.setBackground(Color.WHITE);
@@ -481,17 +546,29 @@ public class Settings_Window {
 			lblKcv_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			lblKcv_1.setBounds(22, 128, 78, 23);
 			panel3432.add(lblKcv_1);
+			GroupLayout gl_panel_3 = new GroupLayout(panel_3);
+			gl_panel_3.setHorizontalGroup(
+				gl_panel_3.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_3.createSequentialGroup()
+						.addGap(22)
+						.addComponent(panel3432, GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+						.addGap(23))
+			);
+			gl_panel_3.setVerticalGroup(
+				gl_panel_3.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_3.createSequentialGroup()
+						.addGap(11)
+						.addComponent(panel3432, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE))
+			);
+			panel_3.setLayout(gl_panel_3);
 
 			JPanel panel_4 = new JPanel();
 			panel_4.setBackground(Color.DARK_GRAY);
 			tabbedPane.addTab("ECDH", null, panel_4, null);
-			panel_4.setLayout(null);
 
 			JPanel panel_5 = new JPanel();
 			panel_5.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "MY PUBLIC KEY", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
 			panel_5.setBackground(Color.DARK_GRAY);
-			panel_5.setBounds(10, 5, 432, 83);
-			panel_4.add(panel_5);
 			panel_5.setLayout(new BorderLayout(0, 0));
 
 			JTextArea txtbMyPublicKey = new JTextArea();
@@ -502,8 +579,6 @@ public class Settings_Window {
 			JPanel panel_5_1 = new JPanel();
 			panel_5_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "OTHER PUBLIC KEY", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(255, 255, 255)));
 			panel_5_1.setBackground(Color.DARK_GRAY);
-			panel_5_1.setBounds(10, 89, 432, 94);
-			panel_4.add(panel_5_1);
 			panel_5_1.setLayout(new BorderLayout(0, 0));
 
 			JTextArea txtbOtherPublicKey = new JTextArea();
@@ -514,8 +589,6 @@ public class Settings_Window {
 			JPanel panel_5_1_1 = new JPanel();
 			panel_5_1_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "KEY", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(255, 255, 255)));
 			panel_5_1_1.setBackground(Color.DARK_GRAY);
-			panel_5_1_1.setBounds(10, 183, 432, 62);
-			panel_4.add(panel_5_1_1);
 			panel_5_1_1.setLayout(new BorderLayout(0, 0));
 
 			JTextArea txtbGeneratedECKey = new JTextArea();
@@ -527,14 +600,10 @@ public class Settings_Window {
 			JLabel lblNewLabel = new JLabel("KCV:");
 			lblNewLabel.setForeground(Color.WHITE);
 			lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblNewLabel.setBounds(10, 256, 46, 14);
-			panel_4.add(lblNewLabel);
 
 			JLabel txtbKCVEC = new JLabel("---");
 			txtbKCVEC.setForeground(Color.WHITE);
 			txtbKCVEC.setFont(new Font("Tahoma", Font.BOLD, 14));
-			txtbKCVEC.setBounds(49, 256, 74, 14);
-			panel_4.add(txtbKCVEC);
 
 			JButton btnCalculateECDH = new JButton("2 - CALC");
 			btnCalculateECDH.setBackground(Color.WHITE);
@@ -553,8 +622,6 @@ public class Settings_Window {
 
 				}
 			});
-			btnCalculateECDH.setBounds(175, 290, 89, 52);
-			panel_4.add(btnCalculateECDH);
 
 			btnInitECDH = new JButton("1 - INIT");
 			btnInitECDH.setBackground(Color.WHITE);
@@ -571,8 +638,6 @@ public class Settings_Window {
 					}
 				}
 			});
-			btnInitECDH.setBounds(76, 290, 89, 52);
-			panel_4.add(btnInitECDH);
 
 
 
@@ -594,8 +659,57 @@ public class Settings_Window {
 				}
 			});
 			btnKeystoreAdd.setBackground(Color.WHITE);
-			btnKeystoreAdd.setBounds(274, 290, 89, 52);
-			panel_4.add(btnKeystoreAdd);
+			GroupLayout gl_panel_4 = new GroupLayout(panel_4);
+			gl_panel_4.setHorizontalGroup(
+				gl_panel_4.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_4.createSequentialGroup()
+						.addGap(10)
+						.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel_4.createSequentialGroup()
+								.addGap(39)
+								.addComponent(txtbKCVEC, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)))
+					.addGroup(gl_panel_4.createSequentialGroup()
+						.addGap(76)
+						.addComponent(btnInitECDH, GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+						.addGap(10)
+						.addComponent(btnCalculateECDH, GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+						.addGap(10)
+						.addComponent(btnKeystoreAdd, GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+						.addGap(89))
+					.addGroup(gl_panel_4.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+						.addContainerGap())
+					.addGroup(gl_panel_4.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(panel_5_1, GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+						.addContainerGap())
+					.addGroup(gl_panel_4.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(panel_5_1_1, GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+						.addContainerGap())
+			);
+			gl_panel_4.setVerticalGroup(
+				gl_panel_4.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_4.createSequentialGroup()
+						.addGap(5)
+						.addComponent(panel_5, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+						.addGap(1)
+						.addComponent(panel_5_1, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(panel_5_1_1, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
+						.addGap(11)
+						.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
+							.addComponent(txtbKCVEC, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
+						.addGap(20)
+						.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
+							.addComponent(btnInitECDH, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnCalculateECDH, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnKeystoreAdd, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)))
+			);
+			panel_4.setLayout(gl_panel_4);
 			
 			if(prefs.getBoolean("lineWrap", false)) {
 				chckbLineWrapping.setSelected(true);

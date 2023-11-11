@@ -55,6 +55,8 @@ import javax.swing.JPopupMenu;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
 public class TextEncryptionUtil_Main {
 
@@ -127,10 +129,10 @@ public class TextEncryptionUtil_Main {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+
 		frmHackerinsideTextEncryption = new JFrame();
 		frmHackerinsideTextEncryption.setIconImage(Toolkit.getDefaultToolkit().getImage(TextEncryptionUtil_Main.class.getResource("/it/HackerInside/TextEncryptionUtility/res/data-encryption.png")));
 		frmHackerinsideTextEncryption.setTitle("HackerInside Text Encryption Utility | Main");
-		frmHackerinsideTextEncryption.setResizable(false);
 		frmHackerinsideTextEncryption.setBounds(100, 100, 1048, 737);
 		frmHackerinsideTextEncryption.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -139,21 +141,15 @@ public class TextEncryptionUtil_Main {
 		panel.setForeground(Color.WHITE);
 		panel.setBackground(Color.DARK_GRAY);
 		frmHackerinsideTextEncryption.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setLayout(null);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.DARK_GRAY);
 		panel_1.setForeground(Color.WHITE);
 		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Key Settings", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
-		panel_1.setBounds(10, 11, 1012, 65);
-		panel.add(panel_1);
-		panel_1.setLayout(null);
 
 		JLabel lblNewLabel = new JLabel("KEY ID:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setBounds(10, 27, 74, 14);
-		panel_1.add(lblNewLabel);
 
 		JTextArea txtbData = new JTextArea();
 		txtbData.setLineWrap(true);
@@ -172,8 +168,6 @@ public class TextEncryptionUtil_Main {
 				}
 			}
 		});
-		scrollPane.setBounds(10, 87, 1012, 600);
-		panel.add(scrollPane);
 
 		JComboBox cmbKID = new JComboBox();
 		cmbKID.setBackground(Color.WHITE);
@@ -193,8 +187,6 @@ public class TextEncryptionUtil_Main {
 		});
 		cmbKID.setToolTipText("KeyStore Key name");
 		cmbKID.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		cmbKID.setBounds(79, 17, 252, 36);
-		panel_1.add(cmbKID);
 
 		JButton btnEncrypt = new JButton("ENCRYPT");
 		btnEncrypt.setBackground(Color.WHITE);
@@ -218,8 +210,6 @@ public class TextEncryptionUtil_Main {
 			}
 		});
 		btnEncrypt.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnEncrypt.setBounds(341, 17, 98, 36);
-		panel_1.add(btnEncrypt);
 
 		JButton btnDecrypt = new JButton("DECRYPT");
 		btnDecrypt.setBackground(Color.WHITE);
@@ -245,8 +235,6 @@ public class TextEncryptionUtil_Main {
 			}
 		});
 		btnDecrypt.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnDecrypt.setBounds(449, 17, 98, 36);
-		panel_1.add(btnDecrypt);
 
 		JButton btnZeroize = new JButton("ZEROIZE");
 		btnZeroize.addActionListener(new ActionListener() {
@@ -263,8 +251,6 @@ public class TextEncryptionUtil_Main {
 		btnZeroize.setForeground(Color.WHITE);
 		btnZeroize.setBackground(Color.RED);
 		btnZeroize.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnZeroize.setBounds(904, 17, 98, 36);
-		panel_1.add(btnZeroize);
 
 		JButton btnSettings = new JButton("");
 		btnSettings.setBackground(Color.WHITE);
@@ -276,15 +262,11 @@ public class TextEncryptionUtil_Main {
 			}
 		});
 		btnSettings.setToolTipText("User Settings");
-		btnSettings.setBounds(850, 17, 40, 36);
-		panel_1.add(btnSettings);
 		btnSettings.setIcon(new ImageIcon(TextEncryptionUtil_Main.class.getResource("/it/HackerInside/TextEncryptionUtility/res/icons8-support-30.png")));
 
 		JLabel lblFrancescoValentini = new JLabel("Francesco Valentini - 2023");
 		lblFrancescoValentini.setForeground(Color.WHITE);
 		lblFrancescoValentini.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblFrancescoValentini.setBounds(613, 28, 173, 14);
-		panel_1.add(lblFrancescoValentini);
 
 
 		// TextArea prefs
@@ -323,6 +305,75 @@ public class TextEncryptionUtil_Main {
 			}
 		});
 		popupMenu.add(btnSaveFile);
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(10)
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPane, Alignment.LEADING)
+						.addComponent(panel_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1012, Short.MAX_VALUE))
+					.addGap(10))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(11)
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+					.addGap(11)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
+		gl_panel_1.setHorizontalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGap(4)
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+							.addGap(247))
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addGap(69)
+							.addComponent(cmbKID, 0, 252, Short.MAX_VALUE)))
+					.addGap(10)
+					.addComponent(btnEncrypt, GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+					.addGap(10)
+					.addComponent(btnDecrypt, GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+					.addGap(66)
+					.addComponent(lblFrancescoValentini, GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+					.addGap(64)
+					.addComponent(btnSettings, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+					.addGap(14)
+					.addComponent(btnZeroize, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE))
+		);
+		gl_panel_1.setVerticalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGap(1)
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addGap(10)
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
+						.addComponent(cmbKID, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)))
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGap(1)
+					.addComponent(btnEncrypt, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGap(1)
+					.addComponent(btnDecrypt, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGap(12)
+					.addComponent(lblFrancescoValentini, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGap(1)
+					.addComponent(btnSettings, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGap(1)
+					.addComponent(btnZeroize, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+		);
+		panel_1.setLayout(gl_panel_1);
+		panel.setLayout(gl_panel);
 	}
 
 	public static void updateKeysList(JComboBox<String> jcombo) throws Exception { // Aggiorna la lista delle chiavi
@@ -500,6 +551,7 @@ public class TextEncryptionUtil_Main {
 			while(s.hasNextLine()) {
 				data = data + s.nextLine();
 			}
+			s.close();
 		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(null,e.getMessage());
 			e.printStackTrace();

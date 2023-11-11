@@ -9,9 +9,9 @@ import javax.crypto.KeyAgreement;
 
 import java.util.*;
 import java.nio.ByteBuffer;
-import java.util.Base64;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
+import org.apache.commons.codec.binary.Base32;
 
 
 public class Ecdh {
@@ -26,11 +26,15 @@ public class Ecdh {
 	}
 
 	public String getPublicKey() {
-		return Base64.getEncoder().encodeToString(ourPk);
+		Base32 base32 = new Base32();
+		return base32.encodeAsString(ourPk).replace('=', '9');
 	}
 
 	public byte[] generateSharedSecret(String otherPkBase64) throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException {
-		byte[] otherPk = Base64.getDecoder().decode(otherPkBase64);
+		Base32 base32 = new Base32();
+		
+		otherPkBase64 = otherPkBase64.replace('9', '=');
+		byte[] otherPk = base32.decode(otherPkBase64);
 
 		KeyFactory kf = KeyFactory.getInstance("EC");
 		X509EncodedKeySpec pkSpec = new X509EncodedKeySpec(otherPk);
